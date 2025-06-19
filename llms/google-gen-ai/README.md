@@ -1,0 +1,6 @@
+- history - 2 [DONE]
+- stream response - 3 [DONE]
+- Micro service AI -6
+- Tuning based on harmful content - 1 [NOT_NECESSARY]
+- Continous message loop - 4 [NOT_NECESSARY_HAS_BEEN_DONE]
+- Human in the middle - 5 [DONE]

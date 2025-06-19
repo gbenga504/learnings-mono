@@ -1,0 +1,43 @@
+# Use daemonsets when you want pods to run on all nodes in the cluster
+# This is useful for building logs, monitoring system etc. These will scrap stats and send to an online db
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: busybox-cmd
+  namespace: kube-system
+  labels:
+    k8s-app: cmd
+spec:
+  selector:
+    matchLabels:
+      app: busybox-cmd
+  template:
+    metadata:
+      labels:
+        app: busybox-cmd
+    spec:
+      # tolerations:
+      # We can specify what nodes our pods should be started on using the key field
+      # This is an optional field. If not specified, then our pods are started on all the pods by default
+      containers:
+        - name: busybox
+          image: busybox:latest
+          resources:
+            # Always very good to specify the resources for pods within a daemonset
+            limits:
+              memory: 100Mi
+              cpu: 100m
+            requests:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+      # it may be desirable to set a high priority class to ensure that a DaemonSet Pod
+      # preempts running Pods
+      # priorityClassName: "high-priority"
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log

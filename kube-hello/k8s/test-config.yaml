@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: my-namespace
+  name: test-config
+data:
+  school_api_url: http://school-api-service.my-namespace

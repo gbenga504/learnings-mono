@@ -1,0 +1,4 @@
+deployment:
+  replicas: 3
+
+name: log-server-2

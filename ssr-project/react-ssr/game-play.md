@@ -1,0 +1,13 @@
+- Create a simple SSR express app - DONE
+- Create a simple SSR React app with express - DONE
+- Add Client side rehydration + rendering - DONE
+- Add routing (Single page navigation) - DONE
+- Add ability to make requests between the server and the client
+  - Why does the browser send login request to the frontend server while this makes the request to backend ? - DONE
+  - Why does every page need a getData function ? - DONE
+  - Why do we need a proxy ? - DONE
+- Lazy loading (Super Bonus tip)
+- Add ability to handle errors that occur (Super Bonus tip)
+- Setup environment variables (Bonus tip)
+- Setup client based routes (Bonus tip)
+- Add ability to change the headers and metas (React-Helmet i.e Bonus tip)

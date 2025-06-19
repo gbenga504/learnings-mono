@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-logger
+  namespace: query-logger
+  labels:
+    app: query-logger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query-logger
+  template:
+    metadata:
+      labels:
+        app: query-logger
+    spec:
+      containers:
+        - name: webapp
+          image: query-logger:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: log-directory
+              mountPath: /app/files
+      volumes:
+        - name: log-directory
+          persistentVolumeClaim:
+            claimName: large-file-system-claim

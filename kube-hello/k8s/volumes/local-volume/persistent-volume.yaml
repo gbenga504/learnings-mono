@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: large-file-system-volume
+  # kubernetes uses the spec to connect the PV with the storage class
+  # It is also important we use the ReadWriteOnce accessModes else kubernetes will fail to bind the PVC with the PV
+  # I think this is an issue with the local volumes
+spec:
+  capacity:
+    storage: 900Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  # This path must exist on the node the persistent volume is mounted on
+  # This is a local volume also. /tmp is not the best as the files are constantly deleted
+  local:
+    path: /tmp
+  # Super important to specify this so that pv are bound to the node as well as pods and rescheduling pods work well
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube

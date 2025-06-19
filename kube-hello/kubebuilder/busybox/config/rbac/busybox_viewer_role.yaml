@@ -1,0 +1,23 @@
+# permissions for end users to view busyboxes.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: busybox
+    app.kubernetes.io/managed-by: kustomize
+  name: busybox-viewer-role
+rules:
+- apiGroups:
+  - intro.github.com
+  resources:
+  - busyboxes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - intro.github.com
+  resources:
+  - busyboxes/status
+  verbs:
+  - get

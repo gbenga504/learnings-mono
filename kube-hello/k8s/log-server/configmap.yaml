@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: log-server-config-file
+  namespace: log-server
+data:
+  log.txt: |
+    Log 0: START

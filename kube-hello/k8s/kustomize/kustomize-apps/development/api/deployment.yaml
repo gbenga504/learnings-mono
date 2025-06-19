@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-server
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          image: europe-west10-docker.pkg.dev/total-triumph-428918-t6/staging/log-server:master

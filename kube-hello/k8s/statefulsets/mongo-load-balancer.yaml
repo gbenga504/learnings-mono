@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-loadbalancer
+  namespace: statefulset-mongo
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  # We want to connect the loadbalancer to the master pod so we can write data
+  # The headless service will still take care of pod to pod communication so data can be replicated
+  # We use the unique identifier in the master pod label
+  selector:
+    statefulset.kubernetes.io/pod-name: mongo-2
+  ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017

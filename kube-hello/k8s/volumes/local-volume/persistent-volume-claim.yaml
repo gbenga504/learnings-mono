@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: large-file-system-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # Filesystem is the default volume mode
+  volumeMode: Filesystem
+  # We want a persistent volume with 800 mb space
+  resources:
+    requests:
+      storage: 800Mi
+  # We specify the storage class name so that the claim is bound to a persistent volume with this same storage class
+  # We can as well not set this at all and leave k8s to choose default. See docs
+  storageClassName: local-storage
+  # Only volumes that match this label will be bound to this claim
+  # selector:
+  #   matchLabels:
+  #     app: largeDiskSpace

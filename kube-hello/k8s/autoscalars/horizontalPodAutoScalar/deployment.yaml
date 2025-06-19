@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hpa
+  name: hpa
+  namespace: hpa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpa
+  template:
+    metadata:
+      labels:
+        app: hpa
+    spec:
+      containers:
+        - image: europe-west10-docker.pkg.dev/total-triumph-428918-t6/staging/hpa:v1.0
+          imagePullPolicy: Always
+          name: webapp
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 200m
+              memory: 100Mi
+      imagePullSecrets:
+        - name: hpacred

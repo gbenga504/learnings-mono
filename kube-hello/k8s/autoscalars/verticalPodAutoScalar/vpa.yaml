@@ -1,0 +1,30 @@
+# I had to install the CRD from this repo https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md
+# to use this (CRD and RBAC)
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa
+  namespace: vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: vpa
+  resourcePolicy:
+    # containerPolicies:
+    #   - containerName: "*"
+    #     controlledResources:
+    #       - cpu
+    #       - memory
+    #     maxAllowed:
+    #       cpu: 1
+    #       memory: 500Mi
+    #     minAllowed:
+    #       cpu: 200m
+    #       memory: 200Mi
+  updatePolicy:
+    # Auto - It recreates the pod based on the recommendation of the vpa
+    # Off – VPA will only provide the recommendations, and it will not automatically change resource requirements.
+    # Initial – VPA only assigns resource requests on pod creation and never changes them later.
+    # Recreate – VPA assigns resource requests on pod creation time and updates them on existing pods by evicting and recreating them.
+    updateMode: "Off"

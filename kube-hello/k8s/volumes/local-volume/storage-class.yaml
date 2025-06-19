@@ -1,0 +1,15 @@
+# A storage class is a representation of an actual storage that sits somewhere
+# This kubernetes resource can automatically create persistent volumes however dynamically provisioning of Persistent volume
+# does not occur for >= version 1.30
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+# Dynamic provisioning of persistent volumes by the storage class does not happen from v1.30
+# "WaitForFirstConsumer" ensures that the pod constraints are evaluated against the node before binding happens
+# Hence a pod is first scheduled on the best node based on its constraint by the scheduler and then the binding happens
+
+# "Immediate" ensures that the pvc is bound immediately to a pv even before knowing the pod constraints
+# Good for other volume types but not good for local volumes because the pod might not be able to use the node the pv is bound to
+volumeBindingMode: Immediate

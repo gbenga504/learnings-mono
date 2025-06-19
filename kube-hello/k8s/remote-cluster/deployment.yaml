@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-server
+  namespace: devops
+  labels:
+    app: log-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-server
+  template:
+    metadata:
+      labels:
+        app: log-server
+    spec:
+      restartPolicy: Always
+      # imagePullSecrets:
+      #   - name: artifacts-reg-secrets
+      containers:
+        - name: app
+          image: europe-west10-docker.pkg.dev/total-triumph-428918-t6/production/example-app:v2.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+      #     volumeMounts:
+      #       - name: log-directory
+      #         mountPath: /app/files
+      # volumes:
+      #   - name: log-directory
+      #     hostPath:
+      #       path: /custom-file-dir
+      #       type: DirectoryOrCreate

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-sample
+spec:
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+        - name: app
+          image: busybox:latest
+          command: ["sh", "-c", 'echo "Hello world" && sleep 3600']
+          ports:
+            - containerPort: 8000

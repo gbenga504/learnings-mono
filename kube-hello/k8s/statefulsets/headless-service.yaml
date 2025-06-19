@@ -1,0 +1,17 @@
+# We need to create a headless service to manage the pods within a stateful set
+# The headless service is the only way to reach the pods of a stateful set
+# The name of the service needs to match the serviceName field of the stateful set
+# Also we set clusterIP: None to create an headless service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: statefulset-mongo
+spec:
+  clusterIP: None
+  selector:
+    app: mongo
+  ports:
+    - name: mongo
+      port: 27017
+      targetPort: 27017

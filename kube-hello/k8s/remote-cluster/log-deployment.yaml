@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-logger
+  namespace: devops
+  labels:
+    app: query-logger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query-logger
+  template:
+    metadata:
+      labels:
+        app: query-logger
+    spec:
+      containers:
+        - name: webapp
+          image: europe-west10-docker.pkg.dev/total-triumph-428918-t6/production/log-server:v2.0
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+          ports:
+            - containerPort: 8000
+          # These directory or files do not need to exist in the container. It is automatically created
+          # and the mount paths are set to track it
+          volumeMounts:
+            - name: log-directory
+              mountPath: /app/files
+            # If this file already exist in the container, then the content is overriden with the content of the file mounted
+            # in the node. I also think mounting the directory is more than enough. The contents of the dir will be sync with the node dir
+            - name: log-file
+              mountPath: /app/files/log.json
+      volumes:
+        # This creates a directory if it does not already exist on the pod (hostPath)
+        # This is gonna be used as a volume. If the container or pod is restarted, we don't lose the data
+        # because this volume resides on the node that pod is started in
+        # There are however some disadvantages with hostPath:
+        # - In a multi-node cluster, we cannot always say what node a pod will be started in, hence if a pod is restarted, we risk losing data
+        # - A unsecure pod, can change the configuration of folders within the node which can be a security risk
+        # - Excessive use of hostPath can cluster the disk storage on nodes and lead to not enough space so we need to clean up the data manually ourselves
+        - name: log-directory
+          hostPath:
+            path: /custom-file-dir
+            type: DirectoryOrCreate
+        # Same as above but applies to the file. Also I should note that the files and directory
+        # are created on the node.
+        - name: log-file
+          hostPath:
+            path: /custom-file-dir/log.json
+            type: FileOrCreate

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-server-deployment
+  namespace: log-server
+  labels:
+    app: log-server-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: log-server-api
+  template:
+    metadata:
+      labels:
+        app: log-server-api
+    spec:
+      imagePullSecrets:
+        - name: artifact-registry-svc-account
+      containers:
+        - name: log-server
+          image: europe-west10-docker.pkg.dev/total-triumph-428918-t6/production/log-server:v1.0
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: log-server-config
+              mountPath: /app/files # not used at the moment since this is readOnly
+      volumes:
+        - name: log-server-config
+          configMap:
+            name: log-server-config-file
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: log-server-service
+  namespace: log-server
+spec:
+  type: LoadBalancer
+  selector:
+    app: log-server-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vpa
+  name: vpa
+  namespace: vpa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpa
+  template:
+    metadata:
+      labels:
+        app: vpa
+    spec:
+      containers:
+        # Using the image of the hpa. Too lazy to create a new image
+        - image: europe-west10-docker.pkg.dev/total-triumph-428918-t6/staging/hpa:v1.0
+          imagePullPolicy: Always
+          name: webapp
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+      imagePullSecrets:
+        - name: vpacred

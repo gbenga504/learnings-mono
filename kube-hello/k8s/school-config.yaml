@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: default
+  name: school-config
+data:
+  school_api_url: http://school-api-service.my-namespace
+  name: gbenga
+  age: "70"
+  country: germany
